@@ -5,11 +5,10 @@ services:
     image: ${DOCKER_REGISTRY-}androsovapi
     build:
       context: .
-      dockerfile: Androsov.API\Dockerfile
+      dockerfile: Androsov.API/Dockerfile
 
   androsov.web:
     image: ${DOCKER_REGISTRY-}androsovweb
     build:
       context: .
       dockerfile: Androsov.Web\Dockerfile
-
