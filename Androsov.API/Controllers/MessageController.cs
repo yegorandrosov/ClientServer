@@ -1,3 +1,4 @@
+using Androsov.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,26 +6,34 @@ namespace Androsov.API.Controllers
 {
     //[Authorize]
     [ApiController]
-    [Route("[controller]")]
     public class MessageController : ControllerBase
     {
-        private readonly ILogger<MessageController> _logger;
+        private readonly IMessageRepository messageRepository;
 
-        public MessageController(ILogger<MessageController> logger)
+        public MessageController(IMessageRepository messageRepository)
         {
-            _logger = logger;
+            this.messageRepository = messageRepository;
         }
 
         [HttpPost]
-        public IActionResult Post()
+        [Route("api/v1/users/{username}/messages")]
+        public async Task<IActionResult> Post(string username, string text)
         {
+            await messageRepository.Set(username, text);
+
             return Ok();
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [Route("api/v1/users/{username}/messages")]
+        public IActionResult Get(string username)
         {
-            return Ok();
+            var text = messageRepository.Get(username);
+
+            return new JsonResult(new
+            {
+                Text = text
+            });
         }
     }
 }

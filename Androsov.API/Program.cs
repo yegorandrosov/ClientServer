@@ -1,5 +1,7 @@
 using Androsov.DataAccess;
+using Androsov.DataAccess.Cache;
 using Androsov.DataAccess.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,17 +13,21 @@ if (connectionString == null)
 
 builder.Services.ConfigureSqlServer(connectionString);
 
-// Add services to the container.
+
+builder.Services.ConfigureCacheServices(builder.Configuration);
+// or configure regular repositories 
+//builder.Services.ConfigureRepositories();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-var databaseIntializer = app.Services.GetRequiredService<IDatabaseInitializer>();
-databaseIntializer.Initialize();
+using var scope = app.Services.CreateScope();
+var databaseIntializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+await databaseIntializer.Initialize();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
