@@ -19,7 +19,7 @@ namespace Androsov.Services.API.Implementations
         {
             var httpClient = apiClient.CreateHttpClient();
 
-            httpClient.BaseAddress = new Uri($"http://localhost:5000/api/v1/users/{username}/");
+            httpClient.BaseAddress = new Uri($"https://androsovapi/api/v1/users/{username}/");
 
             return httpClient;
         }

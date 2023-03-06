@@ -8,8 +8,6 @@ namespace Androsov.Services.API.Models.Responses
 {
     public class GetMessageResponse
     {
-        public bool IsSuccess { get; set; }
-
-        public string? Message { get; set; }
+        public string? Text { get; set; }
     }
 }

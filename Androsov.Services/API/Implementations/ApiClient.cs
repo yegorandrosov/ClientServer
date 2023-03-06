@@ -20,7 +20,7 @@ namespace Androsov.Services.API.Implementations
 
         public HttpClient CreateHttpClient()
         {
-            var httpClient = httpClientFactory.CreateClient();
+            var httpClient = httpClientFactory.CreateClient("api");
 
             return httpClient;
         }
