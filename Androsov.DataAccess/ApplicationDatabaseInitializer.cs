@@ -1,6 +1,7 @@
 ﻿using Androsov.DataAccess.Entities;
 using Androsov.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Androsov.DataAccess
 {
@@ -18,27 +19,29 @@ namespace Androsov.DataAccess
         public async Task Initialize()
         {
             db.Database.EnsureCreated();
-            await CreateUser("Desktop", "Password123");
-            await CreateUser("Web", "Password456");
+            //db.Database.Migrate();
+
+            await CreateUser("Desktop", "Password123!");
+            await CreateUser("Web", "Password456!");
 
         }
 
         private async Task CreateUser(string username, string password)
         {
-            var user = db.Users.FirstOrDefault(x => x.UserName == "Desktop");
-            if (user == null)
+            var user = db.Users.FirstOrDefault(x => x.UserName == username);
+            if (user != null)
+                return;
+
+            user = new ApplicationUser()
             {
-                user = new ApplicationUser()
-                {
-                    UserName = "Desktop",
-                };
+                UserName = username,
+            };
 
-                var result = await userManager.CreateAsync(user, "Password123");
+            var result = await userManager.CreateAsync(user, password);
 
-                if (!result.Succeeded)
-                {
-                    throw new Exception("User was not created");
-                }
+            if (!result.Succeeded)
+            {
+                throw new Exception("User was not created");
             }
         }
     }
