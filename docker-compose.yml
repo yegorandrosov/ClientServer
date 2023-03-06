@@ -13,10 +13,18 @@ services:
     image: ${DOCKER_REGISTRY-}androsovapi
     build:
       context: .
-      dockerfile: Androsov.API/Dockerfile
+      dockerfile: Androsov.API\Dockerfile
+    ports:
+        - '5000:80' 
+    depends_on:
+        - mssql
       
   androsov.web:
     image: ${DOCKER_REGISTRY-}androsovweb
     build:
       context: .
       dockerfile: Androsov.Web\Dockerfile
+    ports:
+        - '5001:80' 
+    depends_on:
+        - androsov.api
