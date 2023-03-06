@@ -1,0 +1,38 @@
+﻿<div class="row">
+    <div class="col-12 col-md-6">
+        <label><b>Web text</b></label>
+        <br />
+        <input type="text" id="webText"/>
+        <button type="button" id="submitBtn">Submit</button>
+    </div>
+    <div class="col-12 col-md-6">
+        <label><b>Desktop text</b></label>
+        <br />
+        <label id="desktopText">Loading...</label>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#submitBtn').click(function () {
+                var text = $('#webText').val();
+
+                if (!text)
+                    return;
+
+                $.post('/Home/SetWebText', { text }, function () {
+                    $('#webText').val('');
+                })
+            })
+
+            setInterval(function () {
+                $.get('/Home/GetDesktopText', function (data) {
+                    $('#desktopText').html(data.text);
+                }).fail(function () {
+                    $('#desktopText').html('Error occured');
+                })
+            }, 1000);
+        });
+    </script>
+}

@@ -1,25 +1,49 @@
+using Androsov.Services.API;
+using Androsov.Services.API.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.ConfigureAPI(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+
+    var username = config.GetValue<string>("API:Username");
+    var password = config.GetValue<string>("API:Password");
+
+    if (username == null || password == null)
+    {
+        throw new Exception("API not initialized");
+    }
+
+    return new BasicApiClientAuthentication(username, password);
+});
+
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+#pragma warning disable ASP0014
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+#pragma warning restore ASP0014
+
 
 app.Run();
