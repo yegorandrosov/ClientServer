@@ -5,13 +5,8 @@
     /// </summary>
     public interface IApiClient
     {
-        IAuthenticatedApiClient Me { get; }
-        IAuthenticateApiClientFactory Users { get; }
-    }
-
-    public interface IAuthenticatedApiClient
-    {
-        IMessageApiClient Messages { get; }
-        HttpClient GetHttpClient();
+        IUsersApiClient Me { get; }
+        IUsersApiClientFactory Users { get; }
+        HttpClient CreateHttpClient();
     }
 }

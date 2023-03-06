@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Androsov.Services.API.Responses
+namespace Androsov.Services.API.Models.Responses
 {
     public class GetMessageResponse
     {

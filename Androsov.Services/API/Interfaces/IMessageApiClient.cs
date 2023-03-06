@@ -1,4 +1,4 @@
-﻿using Androsov.Services.API.Responses;
+﻿using Androsov.Services.API.Models.Responses;
 
 namespace Androsov.Services.API.Interfaces
 {
