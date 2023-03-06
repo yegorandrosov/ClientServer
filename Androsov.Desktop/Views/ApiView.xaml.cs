@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Androsov.Desktop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Androsov.Desktop
+namespace Androsov.Desktop.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ApiView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ApiView : UserControl
     {
-        public MainWindow()
+        public ApiView()
         {
             InitializeComponent();
         }
-
     }
 }

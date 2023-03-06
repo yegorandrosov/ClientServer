@@ -13,17 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Androsov.Desktop
+namespace Androsov.Desktop.Components
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for WebText.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WebText : UserControl
     {
-        public MainWindow()
+        public WebText()
         {
             InitializeComponent();
         }
-
     }
 }

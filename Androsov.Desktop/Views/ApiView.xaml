@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="Androsov.Desktop.Views.ApiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Androsov.Desktop.Views" xmlns:components="clr-namespace:Androsov.Desktop.Components" xmlns:viewmodels="clr-namespace:Androsov.Desktop.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:DesktopTextViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="400">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <components:DesktopText Grid.Column="0" DataContext="{Binding DesktopTextViewModel}"></components:DesktopText>
+        <components:WebText Grid.Column="1" DataContext="{Binding WebTextViewModel}"></components:WebText>
+    </Grid>
+</UserControl>
