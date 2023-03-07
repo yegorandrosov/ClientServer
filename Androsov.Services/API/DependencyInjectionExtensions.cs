@@ -7,7 +7,9 @@ namespace Androsov.Services.API
 {
     public static class DependencyInjectionExtensions
     {
-        public static void ConfigureAPI(this IServiceCollection services, Func<IServiceProvider, BasicApiClientAuthentication> getCredentials)
+        public static void ConfigureAPI(this IServiceCollection services, 
+            Func<IServiceProvider, BasicApiClientAuthentication> getCredentialsFactory,
+            ServiceLifetime lifetime)
         {
             services.AddHttpClient("api")
                 .ConfigurePrimaryHttpMessageHandler(() =>
@@ -18,10 +20,10 @@ namespace Androsov.Services.API
                     };
                 });
 
-            services.AddScoped<IApiClient, ApiClient>();
-            services.AddScoped<IUsersApiClientFactory, UsersApiClientFactory>();
+            services.Add(new ServiceDescriptor(typeof(BasicApiClientAuthentication), getCredentialsFactory, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IApiClient), typeof(ApiClient), lifetime));
+            services.Add(new ServiceDescriptor(typeof(IUsersApiClientFactory), typeof(UsersApiClientFactory), lifetime));
 
-            services.AddTransient<BasicApiClientAuthentication>(sp => getCredentials(sp));
         }
     }
 }
