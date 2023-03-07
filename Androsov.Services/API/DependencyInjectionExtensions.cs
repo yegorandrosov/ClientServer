@@ -16,6 +16,7 @@ namespace Androsov.Services.API
                 {
                     return new HttpClientHandler
                     {
+                        // TODO: accept certificate of one container in another
                         ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
                     };
                 });
