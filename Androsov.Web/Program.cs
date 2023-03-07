@@ -3,21 +3,7 @@ using Androsov.Services.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureAPI(sp =>
-{
-    var config = sp.GetRequiredService<IConfiguration>();
-
-    var username = config.GetValue<string>("API:Username");
-    var password = config.GetValue<string>("API:Password");
-
-    if (username == null || password == null)
-    {
-        throw new Exception("API not initialized");
-    }
-
-    return new BasicApiClientAuthentication(username, password);
-});
-
+builder.Services.ConfigureAPI(BasicApiClientAuthentication.FromAppSettings, ServiceLifetime.Scoped);
 
 builder.Services.AddControllersWithViews();
 
