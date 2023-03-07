@@ -17,15 +17,18 @@ namespace Androsov.Desktop.ViewModels
             set
             {
                 DesktopTextStore.Text = value;
+                OnPropertyChanged(nameof(Text));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
 
         public ICommand SubmitDesktopText { get; }
+        public bool CanSubmit => !string.IsNullOrEmpty(Text);
 
-        public DesktopTextViewModel()
+        public DesktopTextViewModel(DesktopTextStore desktopTextStore, SetDesktopTextCommand setDesktopTextCommand)
         {
-            DesktopTextStore = new DesktopTextStore();
-            SubmitDesktopText = new SetDesktopTextCommand(DesktopTextStore);
+            DesktopTextStore = desktopTextStore;
+            SubmitDesktopText = setDesktopTextCommand;
 
             DesktopTextStore.TextChanged += DesktopTextStore_TextChanged;
         }

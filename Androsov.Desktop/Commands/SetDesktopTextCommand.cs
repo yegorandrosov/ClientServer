@@ -1,4 +1,5 @@
 ﻿using Androsov.Desktop.Store;
+using Androsov.Services.API.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +9,23 @@ using System.Windows.Input;
 
 namespace Androsov.Desktop.Commands
 {
-    public class SetDesktopTextCommand : CommandBase
+    public class SetDesktopTextCommand : AsyncCommandBase
     {
-        public SetDesktopTextCommand(DesktopTextStore desktopTextStore)
+        private readonly IApiClient apiClient;
+
+        public SetDesktopTextCommand(DesktopTextStore desktopTextStore, IApiClient apiClient)
         {
             DesktopTextStore = desktopTextStore;
+            this.apiClient = apiClient;
         }
 
         public DesktopTextStore DesktopTextStore { get; }
 
-        public override void Execute(object? parameter)
+        public override async Task ExecuteAsync(object? parameter)
         {
-            DesktopTextStore.Text = "Clicked";
+            await apiClient.Me.Messages.Set(DesktopTextStore.Text!);
+
+            DesktopTextStore.Text = "";
         }
     }
 }

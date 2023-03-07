@@ -5,10 +5,10 @@
         public DesktopTextViewModel DesktopTextViewModel { get; }
         public WebTextViewModel WebTextViewModel { get; }
 
-        public ApiViewViewModel()
+        public ApiViewViewModel(DesktopTextViewModel desktopTextViewModel, WebTextViewModel webTextViewModel)
         {
-            DesktopTextViewModel = new DesktopTextViewModel();
-            WebTextViewModel = new WebTextViewModel();
+            DesktopTextViewModel = desktopTextViewModel;
+            WebTextViewModel = webTextViewModel;
         }
     }
 }

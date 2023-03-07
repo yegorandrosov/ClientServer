@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Androsov.Services.API.Interfaces;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -7,6 +8,8 @@ namespace Androsov.Desktop.ViewModels
     public class WebTextViewModel : ViewModelBase
     {
         private string? _text;
+        private readonly IApiClient apiClient;
+
         public string? Text
         {
             get => _text;
@@ -17,9 +20,10 @@ namespace Androsov.Desktop.ViewModels
             }
         }
 
-        public WebTextViewModel()
+        public WebTextViewModel(IApiClient apiClient)
         {
             DispatcherTimerSetup();
+            this.apiClient = apiClient;
         }
 
         private void DispatcherTimerSetup()
@@ -32,7 +36,8 @@ namespace Androsov.Desktop.ViewModels
 
         private async void CheckForText(object? sender, EventArgs e)
         {
-            Text = Text + "1";
+            var response = await apiClient.Users["Web"].Messages.Get();
+            Text = response.Text;
         }
     }
 }
