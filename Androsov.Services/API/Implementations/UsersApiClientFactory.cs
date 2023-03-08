@@ -1,19 +1,19 @@
 ﻿using Androsov.Services.API.Interfaces;
-using Microsoft.Extensions.Configuration;
 
 namespace Androsov.Services.API.Implementations
 {
     internal class UsersApiClientFactory : IUsersApiClientFactory
     {
-        private readonly IApiClient apiClient;
-        private readonly IConfiguration configuration;
+        private readonly IUsersApiHttpClientFactory usersApiHttpClientFactory;
 
-        public UsersApiClientFactory(IApiClient apiClient, IConfiguration configuration)
+        public UsersApiClientFactory(IUsersApiHttpClientFactory usersApiHttpClientFactory)
         {
-            this.apiClient = apiClient;
-            this.configuration = configuration;
+            this.usersApiHttpClientFactory = usersApiHttpClientFactory;
         }
 
-        public IUsersApiClient this[string username] => new UsersApiClient(apiClient, configuration, username);
+        public IUsersApiClient Create(string username)
+        {
+            return new UsersApiClient(usersApiHttpClientFactory, username);
+        }
     }
 }

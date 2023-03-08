@@ -7,16 +7,16 @@ namespace Androsov.Services.API
 {
     internal class MessageApiClient : IMessageApiClient
     {
-        private readonly IUsersApiClient apiClient;
+        private readonly Func<Task<HttpClient>> httpClientFactory;
 
-        public MessageApiClient(IUsersApiClient apiClient)
+        public MessageApiClient(Func<Task<HttpClient>> httpClientFactory)
         {
-            this.apiClient = apiClient;
+            this.httpClientFactory = httpClientFactory;
         }
 
         public async Task Set(string message)
         {
-            using var httpClient = apiClient.GetHttpClient();
+            using var httpClient = await httpClientFactory();
 
             var body = JsonConvert.SerializeObject(new { text = message });
             var content = new StringContent(body, Encoding.UTF8, "application/json");
@@ -29,7 +29,7 @@ namespace Androsov.Services.API
 
         public async Task<GetMessageResponse> Get()
         {
-            using var httpClient = apiClient.GetHttpClient();
+            using var httpClient = await httpClientFactory();
 
             var response = await httpClient.GetAsync("messages");
             response.EnsureSuccessStatusCode();

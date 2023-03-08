@@ -2,6 +2,6 @@
 {
     public interface IUsersApiClientFactory
     {
-        IUsersApiClient this[string username] { get; }
+        IUsersApiClient Create(string username);
     }
 }

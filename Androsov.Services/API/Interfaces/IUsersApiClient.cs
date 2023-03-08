@@ -3,6 +3,5 @@
     public interface IUsersApiClient
     {
         IMessageApiClient Messages { get; }
-        HttpClient GetHttpClient();
     }
 }

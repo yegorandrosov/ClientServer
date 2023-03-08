@@ -12,7 +12,7 @@ namespace Androsov.DataAccess
 {
     public static class DependencyInjectionExtensions
     {
-        public static void ConfigureSqlServer(this IServiceCollection services, string connectionString)
+        public static void ConfigureSqlServerAndIdentity(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {

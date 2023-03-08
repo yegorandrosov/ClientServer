@@ -1,11 +1,13 @@
-using Androsov.API.Models;
+using Androsov.API.Requests;
 using Androsov.DataAccess.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Androsov.API.Controllers
 {
-    //[Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/v1/users")]
     [ApiController]
     public class MessageController : ControllerBase
     {
@@ -17,8 +19,8 @@ namespace Androsov.API.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/users/{username}/messages")]
-        public async Task<IActionResult> Post(string username, SetTextRequestModel model)
+        [Route("{username}/messages")]
+        public async Task<IActionResult> Post(string username, SetTextRequest model)
         {
             await messageRepository.Set(username, model.Text!);
 
@@ -26,7 +28,7 @@ namespace Androsov.API.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/users/{username}/messages")]
+        [Route("{username}/messages")]
         public async Task<IActionResult> Get(string username)
         {
             var text = await messageRepository.Get(username);
