@@ -24,6 +24,7 @@ builder.Services.ConfigureCacheServices(builder.Configuration);
 //builder.Services.ConfigureRepositories();
 
 builder.Services.AddScoped<TokenService>();
+builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection("TokenOptions"));
 
 builder.Services.AddControllers();
 
@@ -67,10 +68,10 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "apiWithAuthBackend",
-            ValidAudience = "apiWithAuthBackend",
+            ValidIssuer = builder.Configuration["TokenOptions:Issuer"],
+            ValidAudience = builder.Configuration["TokenOptions:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("!SomethingSecret!")
+                Encoding.UTF8.GetBytes(builder.Configuration["TokenOptions:Secret"]!)
             ),
         };
     });

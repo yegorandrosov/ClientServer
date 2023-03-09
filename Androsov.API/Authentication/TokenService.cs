@@ -3,16 +3,24 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Androsov.Services.Authentication
 {
     public class TokenService
     {
-        private const int ExpirationMinutes = 30;
+        private readonly IOptions<TokenOptions> options;
+
+        public TokenService(IOptions<TokenOptions> options)
+        {
+            this.options = options;
+        }
+
+
         public string CreateToken(IdentityUser user)
         {
-            var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
+            var expiration = DateTime.UtcNow.AddMinutes(options.Value.ExpirationInMinutes);
             var token = CreateJwtToken(
                 CreateClaims(user),
                 CreateSigningCredentials(),
@@ -25,8 +33,8 @@ namespace Androsov.Services.Authentication
         private JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials credentials,
             DateTime expiration) =>
             new(
-                "apiWithAuthBackend",
-                "apiWithAuthBackend",
+                options.Value.Issuer,
+                options.Value.Audience,
                 claims,
                 expires: expiration,
                 signingCredentials: credentials
@@ -34,29 +42,20 @@ namespace Androsov.Services.Authentication
 
         private List<Claim> CreateClaims(IdentityUser user)
         {
-            try
-            {
-                var claims = new List<Claim>
+            var claims = new List<Claim>
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, "TokenForTheApiWithAuth"),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.UserName!),
                 };
-                return claims;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return claims;
         }
         private SigningCredentials CreateSigningCredentials()
         {
             return new SigningCredentials(
                 new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("!SomethingSecret!")
+                    Encoding.UTF8.GetBytes(options.Value.Secret)
                 ),
                 SecurityAlgorithms.HmacSha256
             );

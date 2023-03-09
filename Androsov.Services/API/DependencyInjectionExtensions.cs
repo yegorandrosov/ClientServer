@@ -39,7 +39,7 @@ namespace Androsov.Services.API
             services.Add(new ServiceDescriptor(typeof(IUsersApiClientCollection), typeof(UsersApiClientCollection), lifetime));
             
 
-            services.AddSingleton<ITokenValidator, NeverValidTokenValidator>();
+            services.AddSingleton<ITokenValidator, ValidateByIssuingDateTokenValidator>();
         }
     }
 }
