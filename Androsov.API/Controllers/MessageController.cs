@@ -1,7 +1,9 @@
 using Androsov.API.Requests;
+using Androsov.DataAccess.Entities;
 using Androsov.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Androsov.API.Controllers
@@ -12,18 +14,22 @@ namespace Androsov.API.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IMessageRepository messageRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public MessageController(IMessageRepository messageRepository)
+        public MessageController(IMessageRepository messageRepository, UserManager<ApplicationUser> userManager)
         {
             this.messageRepository = messageRepository;
+            this.userManager = userManager;
         }
 
         [HttpPost]
         [Route("{username}/messages")]
         public async Task<IActionResult> Post(string username, SetTextRequest model)
         {
-            await messageRepository.Set(username, model.Text!);
+            if (User!.Identity!.Name != username)
+                return BadRequest("Wrong user");
 
+            await messageRepository.Set(username, model.Text!);
             return Ok();
         }
 
